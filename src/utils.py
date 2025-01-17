@@ -1,5 +1,10 @@
 import pandas as pd
 from scipy import stats
+import numpy as np
+
+def cramers_v(chi2_stat, n, k, r):
+    """Calculate Cramér's V statistic."""
+    return np.sqrt(chi2_stat / (n * min(k - 1, r - 1)))
 
 def chi_square_test_multiple(df, alpha=0.05):
     """
@@ -21,6 +26,7 @@ def chi_square_test_multiple(df, alpha=0.05):
     results = []
     associated_features = set()
     relevant_contingency_tables = {}
+    processed_pairs = set() 
 
     # Explanation about the meaning of the test and the Hypotheses
     print(
@@ -31,12 +37,15 @@ def chi_square_test_multiple(df, alpha=0.05):
     )
 
     objects = df.select_dtypes(include=["object"]).columns
+
     # Iterate over all object-type columns
     for col1 in objects:
         for col2 in objects:
             # Do not repeat yourself
             if col1 != col2:
                 pair = tuple(sorted([col1, col2]))  # Sorting ensures no duplicates like (A, B) and (B, A)
+                if pair in processed_pairs:
+                    continue  # Skip if the pair is already processed
 
                 # Create contingency table
                 contingency_table = pd.crosstab(df[col1], df[col2])
@@ -51,8 +60,15 @@ def chi_square_test_multiple(df, alpha=0.05):
                     result = "Reject the null hypothesis (Significant association)"
                     associated_features.add(pair)                    
                     relevant_contingency_tables[pair] = contingency_table
+                    # Calculate Cramér's V for significant results
+                    n = contingency_table.sum().sum()  # Total number of observations
+                    k = contingency_table.shape[0]  # Number of categories in the first variable
+                    r = contingency_table.shape[1]  # Number of categories in the second variable
+                    cramers_v_value = cramers_v(chi2_stat, n, k, r)
                 else:
                     result = "Fail to reject the null hypothesis (No significant association)"
+                    is_significant = "No"
+                    cramers_v_value = None 
 
                 # Append results to the list
                 results.append(
@@ -63,9 +79,11 @@ def chi_square_test_multiple(df, alpha=0.05):
                         "p-value": p_val,
                         "Degrees of Freedom": dof,
                         "Test Result": result,
+                        "Is Significant": is_significant,  
+                        "Cramér's V": cramers_v_value,  
                     }
                 )
-
+                processed_pairs.add(pair)
     # Convert results into DF
     results_df = pd.DataFrame(results)
 
