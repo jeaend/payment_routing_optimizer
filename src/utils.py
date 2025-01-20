@@ -229,8 +229,8 @@ def preprocess_data(df):
     # Add the 'is_peak_time' feature (1 if time is between 13:00 and 18:00, else 0)
     df['is_peak_time'] = df['tmsp'].apply(lambda x: 1 if 13 <= x.hour < 18 else 0)
     
-    # Convert booleans to object type
-    df['success'] = df['success'].astype('object')
+    # Convert booleans to approprate types
+    df['success'] = df['success'].astype(int) # as target
     df['3d_secured'] = df['3d_secured'].astype('object')
     df['is_peak_time'] = df['is_peak_time'].astype('object')
 
@@ -270,10 +270,14 @@ def validate_data(df):
         invalid_values = [value for value in unique_values if value not in valid_list]
         if invalid_values:
             print(f"Invalid values in '{column}': {invalid_values}")
-    
-    # Check if all columns except 'amount' are of type object
+        
+    # Check if all columns except 'amount' and 'success' are of type object
     for column in df.columns:
-        if column != 'amount' and df[column].dtype != 'object':
-            print(f"Error: Column '{column}' is not of type 'object'.")
+        if column not in ['amount', 'success'] and df[column].dtype != 'object':
+            print(f"Error: Column '{column}' is of wrong type.")
+
+    # Check if 'success' and 'amount' are of type int
+    if df['success'].dtype != 'int' or df['amount'].dtype != 'int':
+        print("Error: 'success' or 'amount' is not of type int.")
     
     print("Validation complete and successful.")
