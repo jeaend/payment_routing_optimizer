@@ -208,3 +208,72 @@ def calculate_grouped_metrics(df, group_by_column):
     pd.set_option('display.float_format', '{:,.1f}'.format)
 
     return results_df
+
+def preprocess_data(df):
+    """
+    Preprocesses the dataset for modeling.
+    - Drops unnecessary columns.
+    - Renames columns to lowercase.
+    - Converts specified columns to object type.
+    - Adds a new 'is_peak_time' feature.
+    
+    Parameters:
+        df (pd.DataFrame): The input dataset.
+        
+    Returns:
+        pd.DataFrame: The preprocessed dataset.
+    """
+    # Rename all columns to lowercase
+    df.columns = df.columns.str.lower()
+
+    # Add the 'is_peak_time' feature (1 if time is between 13:00 and 18:00, else 0)
+    df['is_peak_time'] = df['tmsp'].apply(lambda x: 1 if 13 <= x.hour < 18 else 0)
+    
+    # Convert booleans to object type
+    df['success'] = df['success'].astype('object')
+    df['3d_secured'] = df['3d_secured'].astype('object')
+    df['is_peak_time'] = df['is_peak_time'].astype('object')
+
+    # Only grab the chosen features, reorder so target at end
+    df = df[['country', 'card', '3d_secured', 'is_peak_time', 'amount', 'psp', 'success']]
+    
+    return df
+
+def validate_data(df):
+    """
+    Validates the DataFrame `df` for the following:
+    1. Checks if the columns (except 'amount') are of type 'object'.
+    2. Validates the distinct values in each column against predefined valid values.
+    
+    Args:
+        df (pandas.DataFrame): The DataFrame containing the data to validate.
+        
+    Prints:
+        - Error messages if any column is not of type 'object' (except 'amount').
+        - A list of invalid values for each column if any values are found that do not
+          match the predefined valid values.
+    """
+
+    # Define the valid values for each column
+    valid_values = {
+        'country': ['Germany', 'Austria', 'Switzerland'],
+        'card': ['Master', 'Diners', 'Visa'],
+        '3d_secured': [0, 1],
+        'is_peak_time': [0, 1],
+        'psp': ['UK_Card', 'Simplecard', 'Moneycard', 'Goldcard'],
+        'success': [0, 1]
+    }
+
+        # Validate the distinct values in each column
+    for column, valid_list in valid_values.items():
+        unique_values = df[column].unique()
+        invalid_values = [value for value in unique_values if value not in valid_list]
+        if invalid_values:
+            print(f"Invalid values in '{column}': {invalid_values}")
+    
+    # Check if all columns except 'amount' are of type object
+    for column in df.columns:
+        if column != 'amount' and df[column].dtype != 'object':
+            print(f"Error: Column '{column}' is not of type 'object'.")
+    
+    print("Validation complete and successful.")
