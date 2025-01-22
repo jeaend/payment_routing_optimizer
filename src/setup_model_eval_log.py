@@ -13,7 +13,7 @@ from sklearn.metrics import (
     classification_report,
 )
 
-eval_file_path = "./models/evaluation/model_evaluation_log.csv"
+eval_file_path = "../models/evaluation/model_evaluation_log.csv"
 
 # Initialize the CSV file with headers if it doesn't exist
 # If it exists, it appends the data
