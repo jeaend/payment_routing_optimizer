@@ -13,9 +13,11 @@ from sklearn.metrics import (
     classification_report,
 )
 
+eval_file_path = "./models/evaluation/model_evaluation_log.csv"
+
 # Initialize the CSV file with headers if it doesn't exist
 # If it exists, it appends the data
-def initialize_log(file_path="./models/evaluation/model_evaluation_log.csv"):
+def initialize_log(file_path=eval_file_path):
     try:
         # Create directory if it doesn't exist
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -67,7 +69,7 @@ def extract_hyperparameters(model):
 
 # Log the results
 def log_results(model_name, conf_matrix, pr_auc, f1_overall, 
-                precision_overall, recall_overall, class_metrics, train_score, validation_score, notes, hyperparameters, file_path="./models/evaluation/model_evaluation_log.csv"):
+                precision_overall, recall_overall, class_metrics, train_score, validation_score, notes, hyperparameters, file_path=eval_file_path):
     with open(file_path, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow([
@@ -84,7 +86,7 @@ def log_results(model_name, conf_matrix, pr_auc, f1_overall,
             json.dumps(hyperparameters)  # Serialize hyperparameters
         ])
 
-def log_model_evaluation(model, X_train, X_test, y_train, y_test, model_name, notes, file_path="models/evaluation/model_evaluation_log.csv"):
+def log_model_evaluation(model, X_train, X_test, y_train, y_test, model_name, notes, file_path=eval_file_path):
     """
     This function performs the evaluation of the model, extracts metrics, and logs the results.
 
@@ -124,7 +126,7 @@ def log_model_evaluation(model, X_train, X_test, y_train, y_test, model_name, no
     )
 
 # Pretty display of logged results
-def display_log(file_path="./models/evaluation/model_evaluation_log.csv"):
+def display_log(file_path=eval_file_path):
     if os.path.exists(file_path):
         df = pd.read_csv(file_path)
         pd.set_option("display.max_columns", None)  
