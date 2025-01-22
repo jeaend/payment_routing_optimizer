@@ -25,9 +25,9 @@ def initialize_log(file_path=eval_file_path):
         with open(file_path, mode='x', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow([
-                "Model_Name", "Hyperparameters", "Confusion_Matrix", "PR_AUC", 
-                "F1_Score_Overall", "Precision_Overall", "Recall_Overall", 
-                "Class_Metrics", "Train_Score", "Validation_Score", "Notes"
+                "Model_Name", "Confusion_Matrix", "PR_AUC", "F1_Score_Overall", 
+                "Precision_Overall", "Recall_Overall", "Class_Metrics", 
+                "Train_Score", "Validation_Score", "Notes", "Hyperparameters"  # Hyperparameters at the end
             ])
     except FileExistsError:
         print(f"{file_path} already exists. New entries will be appended.")
@@ -69,21 +69,23 @@ def extract_hyperparameters(model):
 
 # Log the results
 def log_results(model_name, conf_matrix, pr_auc, f1_overall, 
-                precision_overall, recall_overall, class_metrics, train_score, validation_score, notes, hyperparameters, file_path=eval_file_path):
+                precision_overall, recall_overall, class_metrics, 
+                train_score, validation_score, notes, hyperparameters, 
+                file_path=eval_file_path):
     with open(file_path, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow([
             model_name,
+            json.dumps(conf_matrix.tolist()), 
             pr_auc,
             f1_overall,
             precision_overall,
             recall_overall,
-            json.dumps(class_metrics),  # Serialize class-specific metrics
+            json.dumps(class_metrics),  
             train_score,
             validation_score,
-            json.dumps(conf_matrix.tolist()),  # Serialize confusion matrix
             notes,
-            json.dumps(hyperparameters)  # Serialize hyperparameters
+            json.dumps(hyperparameters) 
         ])
 
 def log_model_evaluation(model, X_train, X_test, y_train, y_test, model_name, notes, file_path=eval_file_path):
