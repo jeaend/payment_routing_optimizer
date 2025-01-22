@@ -55,7 +55,15 @@ def extract_metrics(pipeline, X_test, y_test):
 
 # Function to extract hyperparameters dynamically
 def extract_hyperparameters(model):
-    return model.get_params()
+    """
+    Extracts hyperparameters in a JSON-serializable format.
+    """
+    try:
+        params = model.get_params()
+        return {k: str(v) for k, v in params.items()}  # Convert all values to strings
+    except AttributeError:
+        return {"error": "Hyperparameters could not be extracted"}
+
 
 # Log the results
 def log_results(model_name, conf_matrix, pr_auc, f1_overall, 
