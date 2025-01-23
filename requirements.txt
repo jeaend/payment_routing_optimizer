@@ -1,2 +1,3 @@
-pip install xgboost
-pip install --upgrade imbalanced-learn
+xgboost
+imbalanced-learn==0.12.2
+scikit-learn==1.3.2
