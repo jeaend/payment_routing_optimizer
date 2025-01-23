@@ -185,3 +185,47 @@ def predict_psp_probabilities(model, preprocessor, new_transactions, psp_list):
 
 def log_transform(x):
     return np.log1p(x)
+
+def plot_xgb_feature_importance(pipeline, numerical_features, binary_features, categorical_features):
+    """
+    Function to plot feature importance for 'weight', 'gain', and 'cover' from an XGBoost model in a pipeline.
+    
+    Parameters:
+    - pipeline: The pipeline containing the XGBoost model.
+    - numerical_features: List of numerical feature names.
+    - binary_features: List of binary feature names.
+    - categorical_features: List of categorical feature names.
+    """
+    # Extract the classifier from the pipeline
+    model = pipeline.named_steps['classifier']
+
+    # Get feature names after preprocessing 
+    one_hot_columns = pipeline.named_steps['preprocessor'].transformers_[1][1].get_feature_names_out(categorical_features)
+    all_feature_names = numerical_features + binary_features + list(one_hot_columns)
+
+    # Define importance types
+    importance_types = ['weight', 'gain', 'cover']
+    importance_scores = {}
+
+    # Get feature importance scores for each defined type
+    for importance_type in importance_types:
+        feature_importance = model.get_booster().get_score(importance_type=importance_type)
+        feature_importance = {all_feature_names[int(key[1:])]: value for key, value in feature_importance.items()}
+        importance_scores[importance_type] = {k: v for k, v in sorted(feature_importance.items(), key=lambda item: item[1], reverse=True)}
+
+    # Plotting side by side
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+
+    for ax, importance_type in zip(axes, importance_types):
+        features = list(importance_scores[importance_type].keys())
+        importances = list(importance_scores[importance_type].values())
+        ax.barh(features, importances, color=['deepskyblue', 'forestgreen', 'firebrick'][importance_types.index(importance_type)])
+        ax.set_xlabel(f'Importance ({importance_type})', fontsize=12)
+        ax.set_ylabel('Features', fontsize=12)
+        ax.set_title(f'Feature Importance (XGBoost - {importance_type})', fontsize=14)
+        ax.invert_yaxis()
+
+    plt.tight_layout()
+    plt.show()
+
+    return importance_scores
