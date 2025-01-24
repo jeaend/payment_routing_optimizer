@@ -7,100 +7,41 @@ Develop a machine learning model to optimize the routing of credit card transact
 
 ## 🎯 **Use Case**  
 This project focuses on enhancing the efficiency of credit card transaction routing. The specific objectives include:  
-- **Predictive Modeling:** Create a machine learning model to predict the likelihood of transaction success for each PSP.  
-- **Cost Optimization:** Design a decision framework to select the most cost-efficient PSP for each transaction while maintaining high success rates.  
+- **Predictive Modeling:** Create a machine learning model to predict the likelihood of transaction success for each PSP in order to maximize transaction success and minimize costs.  
 
 ---
 
-## 📦 **Deliverables**  
-
-### **1. Predictive Model**  
-A machine learning model that evaluates the likelihood of transaction success for each PSP, taking into account transaction features such as:  
-- Amount, country, and timestamp.  
-- PSP-specific characteristics (fees and historical performance).  
-
-### **2. Optimal Routing Strategy**  
-A decision-making framework that:  
-- Selects the PSP with the highest predicted success probability and the lowest associated fees.  
-- Incorporates business rules, such as consolidating multiple transaction attempts.  
-
-### **3. Evaluation Metrics**  
-Key metrics to assess the performance of the predictive model and routing strategy include:  
-- **Cost Savings:** Reduction in transaction fees compared to baseline routing methods.  
-- **Success Rate Improvement:** Increase in successful transactions achieved by the model.  
-
----
 
 # 🔍 **Findings**  
+- **TO DO:**
+
+---
+
+## 📈 **Next Steps**  
+
+1. **Dataset Limitations**  
+   - The provided dataset was constructed and lacked meaningful patterns in the features.  
+   - Features like the timestamp were not helpful in the current analysis.  
+   - If there is an underlying issue with the data or feature representation, feature importance should be re-evaluated in future iterations.  
+
+2. **Model Evaluation**  
+   - Evaluate the model's impact on transaction success rates and overall fees using the final dataset.  
+   - Fine-tune and determine an appropriate decision threshold to optimize precision and F1-score.  
+
+3. **Iterative Training**  
+   - Utilize the current approach as a starting point.  
+   - Retrain the model with updated data as the imbalance improves over time, potentially leading to better performance and more balanced predictions.  
 
 ---
 
 # 📚 **Documentation**  
 
----
-
-## 🛠️ **1. Problem Definition**  
-The main objectives of this project are:  
-- To predict the success of credit card transactions.  
-- To optimize routing decisions for PSPs based on transaction attributes.  
-- To minimize overall fees while maintaining high transaction success rates.  
-
----
-
-## 📂 **2. Data Preparation**  
-### **2.1 Understand the Dataset**  
-- 
-
-### **2.2 Data Cleaning**  
--
-
-### **2.3 Data Splitting**  
--
-
----
-
-## 📊 **3. Exploratory Data Analysis (EDA)**  
-- 
-
----
-
-## ⚙️ **4. Feature Engineering**  
-- 
----
-
-## 🧹 **5. Feature Selection**  
-- 
-
----
-
-## 🤖 **6. Model Development**  
-- 
-
----
-
-## 🔧 **7. Optimization**  
--  
-
----
-
-## 🖥️ **8. Deployment Simulation**  
-- Implement routing logic to simulate real-world decision-making.  
-- Evaluate the model's impact on transaction success rates and overall fees.  
-
----
-
-## 📜 **Deliverables**  
-1. **Code Repository:** 
-2. **Summary of Findings:** A detailed summary of the results and business implications. (see above)
-
----
-
 ## 🛠️ **Tools and Libraries**  
 - **Programming Language:** Python.  
 - **Libraries:**  
-  - **EDA and Visualization:** 
-  - **Modeling:**  
-
+  - **EDA and Visualization:** `matplotlib`, `seaborn`.  
+  - **Modeling:** `pandas`, `numpy`, `pickle`, `scikit-learn`, `xgboost`, `scipy`, `ibmlearn`.
+    
 ---
 
 ## 🚀 **Getting Started**  
