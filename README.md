@@ -11,9 +11,12 @@ This project focuses on enhancing the efficiency of credit card transaction rout
 
 ---
 
-
 # 🔍 **Findings**  
-- **TO DO:**
+This case study focuses on using machine learning to optimize credit card routing for online transactions, aiming to replace the current manual rule-based system with a more efficient, automated approach. The primary goal is to address issues with high payment failure rates, which lead to customer dissatisfaction and financial losses, by primarily increasing success rates. The CRISP-DM framework is used as a guideline throughout the project.
+
+The final predictive model using XGBoost was selected for its robustness in handling imbalanced datasets and its ability to provide clear, actionable insights. Hyperparameter tuning was prioritized over resampling strategies, ensuring the model could effectively route transactions to the most appropriate Payment Service Provider (PSP). By predicting success probabilities for each PSP, the model supports dynamic routing decisions that balance cost and performance. The predictive model returns the probability of success for each PSP.
+
+This solution can integrate into the existing infrastructure, delivering improvements in transaction success rates while fostering better customer experiences. The approach also offers deeper insights into payment behaviors and PSP performance.
 
 ---
 
